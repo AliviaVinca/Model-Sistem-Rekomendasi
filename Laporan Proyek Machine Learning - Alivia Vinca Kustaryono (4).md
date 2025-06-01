@@ -381,7 +381,7 @@ Gintama Nanigoto mo Saiyo ga Kanjin nano de Tasho Senobisuru Kurai ga Choudoyoi 
 
 ## Conclusion
 
-Proyek ini berhasil membangun sistem rekomendasi anime berbasis Content-Based Filtering dan collaborative filtering. Model menunjukkan performa yang stabil dan mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
+Proyek ini berhasil membangun sistem rekomendasi anime berbasis Content-Based Filtering dan collaborative filtering. Model mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
 
 * Menambahkan metadata (genre, tipe, studio) sebagai fitur tambahan.
 * Menggunakan teknik regularisasi dan dropout untuk menghindari overfitting.
