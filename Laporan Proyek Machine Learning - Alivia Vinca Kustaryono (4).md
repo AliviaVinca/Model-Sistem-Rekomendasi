@@ -7,7 +7,9 @@ Industri anime telah berkembang pesat dalam dekade terakhir, dengan jutaan pengg
 Rekomendasi yang akurat akan meningkatkan pengalaman pengguna, memperpanjang waktu menonton, dan meningkatkan loyalitas pengguna terhadap platform. Studi oleh \[Gomez-Uribe & Hunt, 2016] menunjukkan bahwa sistem rekomendasi menyumbang lebih dari 80% jam tayang Netflix, membuktikan efektivitas model personalisasi dalam meningkatkan kepuasan pengguna.
 
 > Referensi:
+
 > \[1]Schafer, J. B., Frankowski, D., Herlocker, J., & Sen, S. (2007). Collaborative Filtering Recommender Systems. In The Adaptive Web (pp. 291–324). Springer.
+
 > \[2] Gomez-Uribe, C. A., & Hunt, N. (2016). The Netflix Recommender System: Algorithms, Business Value, and Innovation. *ACM Transactions on Management Information Systems (TMIS)*, 6(4), 1–19.
 
 ## Business Understanding
@@ -66,7 +68,7 @@ Dataset terdiri dari dua file utama:
 
 ### Exploratory Data Analysis (EDA)
 
-**Cek Informasi Dataset**
+#### **Cek Informasi Dataset**
 
 ![Screenshot 2025-06-01 084157](https://github.com/user-attachments/assets/66a9a898-f45e-4498-89d3-41a3ac9f78d9)
 
@@ -89,7 +91,7 @@ Jumlah masing-masing tipe data:
 * int64 → 3 kolom (`user_id`,`anime_id`,`rating`)
 
 
-**Statistik Deskriptif**
+#### **Statistik Deskriptif**
 
 ![Screenshot 2025-06-01 084240](https://github.com/user-attachments/assets/25642e0e-608b-4350-8b49-93eef9b8ad72)
 
@@ -180,7 +182,7 @@ Kolom: `rating`
 
 
 
-**Data Kosong**
+#### **Data Kosong**
 
 ![Screenshot 2025-06-01 084308](https://github.com/user-attachments/assets/6e7d5009-9a02-4a8d-97f2-91e46603d2b3)
 
@@ -195,7 +197,7 @@ Terdapat 62 data kosong pada kolom `genre`, 25 data kosong pada kolom `type`, da
 Tidak terdapat data kosong pada rating.
 
 
-**Data Duplikat**
+#### **Data Duplikat**
 
 ![Screenshot 2025-06-01 084345](https://github.com/user-attachments/assets/abce728f-82cb-4ec2-872e-e260ceae4b56)
 
@@ -204,7 +206,7 @@ Tidak terdapat data kosong pada rating.
 Tidak terdapat duplikat pada data anime dan terdapat satu duplikat pada data rating.
 
 
-**Visualisasi Genre Anime**
+#### **Visualisasi Genre Anime**
 
 ![top 10 genre anime](https://github.com/user-attachments/assets/3fa3acf5-7f3d-4ee4-95a7-fb1b4aaf21ec)
 
@@ -212,7 +214,7 @@ Tidak terdapat duplikat pada data anime dan terdapat satu duplikat pada data rat
 
 Dengan rincian sebagai berikut: Genre Komedi sebanyak 3193, Genre Action sebanyak 2845, Genre Sci-Fi sebanyak 1986, Genre Fantasy sebanyak 1815, Genre Shounen sebanyak 1663, Genre Adventure sebanyak 1457, Genre Comedy sebanyak 1452, Genre Romance sebanyak 1371, Genre Kids sebanyak 1213, dan Genre School sebanyak 1170.
 
-**Visualisasi Tipe Anime**
+#### **Visualisasi Tipe Anime**
 
 ![tipe anime](https://github.com/user-attachments/assets/d93be0b5-fc7c-4c3d-89e5-5f37d28ebb41)
 
@@ -225,16 +227,16 @@ Dengan rincian sebagai berikutt: TV sebanyak 3787, OVA sebanyak 3311, Movie seba
 
 Langkah-langkah preprocessing sebelum membangun sistem rekomendasi:
 
-1. **Sampling rating sebanyak 50.000 rating** karena pada sebelumnya terdapat 7.813.737 baris jadi kita bisa mengambil sebanyak 50.000 sample dari rating tersebut.
+1. **Sampling rating sebanyak 500.000 rating** karena pada sebelumnya terdapat 7.813.737 baris jadi kita bisa mengambil sebanyak 500.000 sample dari rating tersebut.
 2. **Membersihkan kolom kosong** pembersihan kolom kosong dilakukan dengan mengisi value pada kolom `genre` dengan 'Unknown', mengisi value pada kolom `type` dengan 'Unknown', dan mengisi value pada kolom `rating` dengan '0.00'. Hal ini dilakukan agar data variasi anime tetap dan tidak berkurang dan kolom kosong terisi.  
 3. **Membersihkan nama anime** membersihkan nama anime dari karakter non-alfabetnumerik karena model akan lebih baik jika hanya bekerja dengan kata-kata yang bersih dan bermakna.
-4. **Standarisasi genre anime** genre anime di standarisasi dan hanya di ambil satu genre pertama dari anime tersebut agar klasifikasi lebih akurat.
 
 ### Data Preparation & Preprocessing - Content Based Filtering
-1. Ekstraksi Fitur dengan TF-IDF Untuk merepresentasikan setiap anime berdasarkan genre-nya. 
-2. Selanjutnya transformasi genre ke bentuk matriks TF-IDF.
-3. Selanjutnya ubah vektor TF-IDF ke dalam bentuk matriks todense untuk kebutuhan visual.
-4. Selanjutnya buatlah dataframe untuk melihat matriks TF-IDF.
+1. Standarisasi genre anime genre anime di standarisasi (ganti koma menjadi spasi untuk mengganti pemisah genre) agar klasifikasi lebih akurat.
+2. Ekstraksi Fitur dengan TF-IDF Untuk merepresentasikan setiap anime berdasarkan genre-nya. 
+3. Selanjutnya transformasi genre ke bentuk matriks TF-IDF.
+4. Selanjutnya ubah vektor TF-IDF ke dalam bentuk matriks todense untuk kebutuhan visual.
+5. Selanjutnya buatlah dataframe untuk melihat matriks TF-IDF.
 
 ### Data Preparation & Preprocessing - Collaborative Filtering
 1. Panggil kembali data rating yang sudah di sampling di awal `rating_sample`.
@@ -271,15 +273,23 @@ Contoh: Jika seorang pengguna menyukai film bergenre aksi, maka sistem akan mere
 #### Top 5 Recomendation (Content-Based Filtering)
 Untuk pendekatan Content-Based Filtering, hasil rekomendasi didapatkan dengan cara mengamati kualitas Top-N rekomendasi berdasarkan anime yang pernah ditonton atau disukai pengguna.
 
-Ketika pengguna sebelumnya menyukai anime "Sword Art Online" dengan klasifikasi sebagai berikut :
+Ketika pengguna sebelumnya menyukai anime "Saiki Kusuo no nan TV" dengan klasifikasi sebagai berikut :
 
-![Screenshot 2025-06-01 173605](https://github.com/user-attachments/assets/b863ddf3-31cb-4476-a07a-6076c4de672c)
+![Screenshot 2025-06-01 233441](https://github.com/user-attachments/assets/ab2c90ac-385d-47be-a3c2-1a41f089e16f)
 
 Maka sistem akan merekomendasikan 5 anime berikut :
 
-![Screenshot 2025-06-01 173706](https://github.com/user-attachments/assets/ff91751f-69db-4eae-9d1c-5a3ffa2d41f9)
+![Screenshot 2025-06-01 233643](https://github.com/user-attachments/assets/cfa45d99-0789-4d5e-a36c-e1dbc7dae98f)
 
-Rekomendasi tersebut relevan karena memiliki genre yang sama yaitu Action.
+Rekomendasi tersebut relevan karena memiliki genre yang sama atau hampir mirip yaitu Comedy, School, Shounen, Supernatural.
+
+Kita juga dapat menambahkan sistem Fuzzy dalam Content-Based Filtering ini agar bisa memasukan separuh judul animenya lalu langsung terpanggil judul anime terdekat dan rekomendasi animenya. 
+
+Contohnya seperti di bawah ini. Saat kita baru memanggil "Sword Art On" langsung ditampilkan rekomendasi untuk anime "Sword Art Online".
+
+![Screenshot 2025-06-01 234155](https://github.com/user-attachments/assets/dd7c540f-c9f9-49e5-981b-c23bfed81a2e)
+
+![Screenshot 2025-06-01 234223](https://github.com/user-attachments/assets/db831039-d51e-429f-bceb-6f082f8c913a)
 
 ### Collaborative Filtering
 Collaborative Filtering adalah metode sistem rekomendasi yang memberikan rekomendasi kepada pengguna berdasarkan kesamaan preferensi atau perilaku pengguna lain. Metode ini tidak membutuhkan informasi fitur dari item atau pengguna, tetapi hanya mengandalkan interaksi seperti rating, klik, atau pembelian.
@@ -309,13 +319,12 @@ Terdapat dua jenis utama:
 5. Terakhir prediksi dan rekomendasi model.
 
 #### Top 10 Recomendation (Collaborative Filtering)
-Untuk pendekatan Collaborative Filtering, sistem memberikan Top-N rekomendasi film untuk pengguna tertentu berdasarkan skor kecocokan. Misalnya user 41950 yang memberikan rating tinggi pada anime berikut :
+Untuk pendekatan Collaborative Filtering, sistem memberikan Top-N rekomendasi film untuk pengguna tertentu berdasarkan skor kecocokan. Misalnya user 35778 yang memberikan rating tinggi pada anime berikut :
 
-![Screenshot 2025-06-01 174151](https://github.com/user-attachments/assets/869519fe-e4d3-4fb3-b057-74d9752bb522)
+![Screenshot 2025-06-02 002649](https://github.com/user-attachments/assets/3adec6d2-97bf-4a55-969d-75d99225154a)
 
 Maka sistem akan merekomendasikan 10 anime berikut:
-
-![Screenshot 2025-06-01 174213](https://github.com/user-attachments/assets/d2bbbb4b-1642-470c-b04f-fa0da2786967)
+![Screenshot 2025-06-02 002753](https://github.com/user-attachments/assets/50d36e8e-0283-4966-bc76-f20e98c04f4a)
 
 Rekomendasi tersebut relevan dengan preferensi pengguna, terutama karena banyaknya anime yang memiliki genre mirip dengan anime yang sebelumnya disukai oleh pengguna. Hal ini menunjukkan bahwa model collaborative filtering berhasil mempelajari pola ketertarikan pengguna berdasarkan perilaku pengguna lain yang mirip.
 
@@ -333,6 +342,32 @@ Definisi:
 $\text{Precision} = \frac{\text{Jumlah item relevan yang direkomendasikan}}{\text{Jumlah total item yang direkomendasikan}}$
 
 Ini mencerminkan seberapa baik sistem dalam merekomendasikan item paling atas, yang paling mungkin dilihat pengguna.
+
+#### Hasil Evaluasi dengan Precision
+**Kita akan mencoba Precision menggunakan `anime_recomendation`**
+
+Mari kita ambil 1 user fiktif, yang menyukai (menonton dan memberi rating tinggi) beberapa anime lalu panggil precision nya.
+
+![Screenshot 2025-06-02 001631](https://github.com/user-attachments/assets/7764374b-20bc-4d9b-8681-255fb14cf8da)
+
+Model Content-Based Filtering dievaluasi menggunakan metrik Precision@5 terhadap anime Saiki Kusuo no nan TV sebagai input. Dari 5 rekomendasi yang dihasilkan, terdapat X anime yang sesuai dengan anime yang disukai pengguna (ground truth), sehingga:
+
+$\text{Precision@5} = \frac{\text{X}}{\text{5}}=0.X$
+
+**Kita akan mencoba Precision dengan manual**
+![Screenshot 2025-06-02 000604](https://github.com/user-attachments/assets/51e19244-cb8e-436e-a2f9-a7f6d8336d1c)
+
+Berdasarkan hasil evaluasi Content-Based Filtering menggunakan metrik Precision@5 terhadap 1 pengguna uji coba, diperoleh nilai Precision@5 = 0.4
+
+Lalu kita coba menguji dengan 2 pengguna uji coba.
+
+![Screenshot 2025-06-02 000637](https://github.com/user-attachments/assets/5040b2fc-3f65-44fd-b0fb-c574a40c10ff)
+
+Berdasarkan hasil evaluasi Content-Based Filtering menggunakan metrik Precision@5 terhadap 2 pengguna uji coba, diperoleh nilai sebagai berikut:
+- User 1: Precision@5 = 0.4
+- User 2: Precision@5 = 0.4
+
+Maka, rata-rata Precision@5 adalah 0.40. Nilai ini menunjukkan bahwa dari 5 anime yang direkomendasikan, rata-rata 2 dari 5 adalah anime yang memang relevan atau disukai pengguna berdasarkan histori.
 
 ### Evaluasi Collaborative Filtering
 **Metrik Evaluasi Collaborative Filtering: MSE & RMSE**
@@ -358,49 +393,55 @@ $\text{RMSE} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 } = \sqrt{M
 RMSE mengembalikan hasil dalam satuan yang sama dengan rating (misalnya 1–5), sehingga lebih mudah diinterpretasikan.
 
 #### Hasil Evaluasi dengan MSE & RMSE
-![Screenshot 2025-06-01 113945](https://github.com/user-attachments/assets/2908241c-bd61-488b-a9c4-f58f380e9f25)
+![Screenshot 2025-06-02 002035](https://github.com/user-attachments/assets/e3aec390-5a95-43aa-8323-f4c0e4f2f48a)
 
-Hasil evaluasi Collaborative Filtering menunjukkan performa model pada data validasi dengan nilai loss (MSE) sebesar sekitar 53.2460 dan RMSE sekitar 7.2969. Model yang dievaluasi memiliki tingkat kesalahan prediksi yang cukup tinggi (RMSE > 7). Hal ini mengindikasikan bahwa model masih belum cukup akurat dalam memprediksi rating pada data validasi. 
+Hasil evaluasi Collaborative Filtering menunjukkan performa model pada data validasi dengan nilai loss (MSE) sebesar sekitar 36.3658 dan RMSE sekitar 6.0290. Model yang dievaluasi memiliki tingkat kesalahan prediksi yang tergolong sedang, karena nilai RMSE berada di antara 5 hingga 7. Ini berarti rata-rata kesalahan prediksi rating model berkisar ±6 poin pada skala rating yang digunakan. Meskipun model sudah belajar pola dari data pelatihan, masih terdapat ruang untuk perbaikan dalam meminimalkan kesalahan prediksi, terutama untuk meningkatkan kualitas rekomendasi pada data yang belum terlihat sebelumnya.
 
 #### Visualisasi Ecpoch Tarining & Validation
-![RMSE](https://github.com/user-attachments/assets/e9a1ba6c-1826-40b9-bfa2-7465b231673a)
+![RMSE (2)](https://github.com/user-attachments/assets/8a4d913c-b060-4b3e-983a-54aee92b3ed0)
 
-Kurva biru (Train RMSE) menunjukkan bahwa error pada data pelatihan cepat menurun drastis hingga sekitar epoch ke-5, kemudian stabil di sekitar RMSE 1.4. Kurva oranye (Validation RMSE) relatif datar dan tinggi, bertahan di angka sekitar 7.2 – 7.4 selama seluruh pelatihan. Model mengalami overfitting dimana RMSE pada data pelatihan sangat rendah (model mempelajari data pelatihan dengan sangat baik), tetapi RMSE pada data validasi tetap tinggi dan tidak membaik. Ini menunjukkan bahwa model tidak mampu melakukan generalisasi dengan baik ke data yang belum dilihat (data validasi).
+Kurva biru (Train RMSE) menunjukkan bahwa error pada data pelatihan menurun cukup stabil dari awal hingga akhir pelatihan, dengan RMSE yang perlahan turun dari sekitar 4.6 ke sekitar 2.0. Ini menunjukkan bahwa model berhasil belajar dan menyesuaikan diri terhadap data pelatihan secara bertahap.
+
+Sementara itu, kurva oranye (Validation RMSE) justru mengalami tren yang meningkat seiring bertambahnya epoch. RMSE validasi naik perlahan dari sekitar 2.0 menjadi lebih dari 2.5 di akhir pelatihan. Pola ini menunjukkan bahwa model mulai mengalami overfitting, yaitu kondisi ketika model terlalu menyesuaikan diri dengan data pelatihan dan kehilangan kemampuan generalisasi terhadap data baru (validasi).
+
+Dengan kata lain, meskipun performa pada data pelatihan semakin baik, performa pada data validasi justru menurun, menandakan bahwa model tidak bekerja optimal untuk merekomendasikan item kepada pengguna yang belum ada dalam data pelatihan.
 
 
-## Recommendation Output
+## Output
 
-### Recomendation Content-Based Filtering
+### Content-Based Filtering
 Model digunakan untuk memprediksi rekomendasi anime mirip dengan anime yang di panggil.
 
-![Screenshot 2025-06-01 115043](https://github.com/user-attachments/assets/b42bdb38-3f07-4734-8926-ae1b8a3be2f6)
+![Screenshot 2025-06-01 183701](https://github.com/user-attachments/assets/189aa5c3-7f7f-4aad-8d01-7db24ebd8a78)
 
-### Recomendation Collaborative Filtering
+### Collaborative Filtering
 
 Model digunakan untuk memprediksi rating semua anime yang belum ditonton oleh user acak. Kemudian, 10 anime dengan prediksi rating tertinggi direkomendasikan.
 
 
 ```
+Showing recommendations for user: 35778
+===========================
 Anime with high ratings from user
 --------------------------------
-Major World Series : Comedy
-Noragami : Action
-Digimon Adventure : Action
-Life no Color : Music
-AfroKen : Comedy
+Fullmetal Alchemist Brotherhood : Action Adventure Drama Fantasy Magic Military Shounen
+Tonari no Totoro : Adventure Comedy Supernatural
+Evangelion 10 You Are Not Alone : Action Mecha Sci-Fi
+Naruto : Action Comedy Martial Arts Shounen Super Power
+Houkago no Pleiades TV : Magic Space
 --------------------------------
 Top 10 anime recommendation
 --------------------------------
-Mahou Shoujo MadokaMagica : Drama
-Magi The Kingdom of Magic : Action
-Mahou Shoujo MadokaMagica Movie 3 Hangyaku no Monogatari : Drama
-Katanagatari : Action
-Major S6 : Comedy
-Mononoke : Demons
-Noragami Aragoto : Action
-Tonari no Totoro : Adventure
-Ookami to Koushinryou II : Adventure
-Gintama Nanigoto mo Saiyo ga Kanjin nano de Tasho Senobisuru Kurai ga Choudoyoi : Action
+Kimi no Na wa : Drama Romance School Supernatural
+Gintama : Action Comedy Historical Parody Samurai Sci-Fi Shounen
+SteinsGate : Sci-Fi Thriller
+Gintama039 : Action Comedy Historical Parody Samurai Sci-Fi Shounen
+Hunter x Hunter 2011 : Action Adventure Shounen Super Power
+Gintama Movie Kanketsuhen  Yorozuya yo Eien Nare : Action Comedy Historical Parody Samurai Sci-Fi Shounen
+Clannad After Story : Drama Fantasy Romance Slice of Life Supernatural
+Code Geass Hangyaku no Lelouch R2 : Action Drama Mecha Military Sci-Fi Super Power
+Shigatsu wa Kimi no Uso : Drama Music Romance School Shounen
+Tengen Toppa Gurren Lagann : Action Adventure Comedy Mecha Sci-Fi
 ```
 
 ## Conclusion
