@@ -268,6 +268,19 @@ Contoh: Jika seorang pengguna menyukai film bergenre aksi, maka sistem akan mere
 4. Buat fungsi rekomendasi dengan input anime yang di suka dan output daftar anime yang paling mirip berdasarkan skor cosine similarity tertinggi.
 5. Evaluasi sistem dengan test sistem, precision/recall, atau evaluasi manual.
 
+#### Top 5 Recomendation (Content-Based Filtering)
+Untuk pendekatan Content-Based Filtering, hasil rekomendasi didapatkan dengan cara mengamati kualitas Top-N rekomendasi berdasarkan anime yang pernah ditonton atau disukai pengguna.
+
+Ketika pengguna sebelumnya menyukai anime "Sword Art Online" dengan klasifikasi sebagai berikut :
+
+![Screenshot 2025-06-01 173605](https://github.com/user-attachments/assets/b863ddf3-31cb-4476-a07a-6076c4de672c)
+
+Maka sistem akan merekomendasikan 5 anime berikut :
+
+![Screenshot 2025-06-01 173706](https://github.com/user-attachments/assets/ff91751f-69db-4eae-9d1c-5a3ffa2d41f9)
+
+Rekomendasi tersebut relevan karena memiliki genre yang sama yaitu Action.
+
 ### Collaborative Filtering
 Collaborative Filtering adalah metode sistem rekomendasi yang memberikan rekomendasi kepada pengguna berdasarkan kesamaan preferensi atau perilaku pengguna lain. Metode ini tidak membutuhkan informasi fitur dari item atau pengguna, tetapi hanya mengandalkan interaksi seperti rating, klik, atau pembelian.
 
@@ -294,6 +307,17 @@ Terdapat dua jenis utama:
 3. Lalu siapkan input data.
 4. Setelah itu kompilasi dan training model.
 5. Terakhir prediksi dan rekomendasi model.
+
+#### Top 10 Recomendation (Collaborative Filtering)
+Untuk pendekatan Collaborative Filtering, sistem memberikan Top-N rekomendasi film untuk pengguna tertentu berdasarkan skor kecocokan. Misalnya user 41950 yang memberikan rating tinggi pada anime berikut :
+
+![Screenshot 2025-06-01 174151](https://github.com/user-attachments/assets/869519fe-e4d3-4fb3-b057-74d9752bb522)
+
+Maka sistem akan merekomendasikan 10 anime berikut:
+
+![Screenshot 2025-06-01 174213](https://github.com/user-attachments/assets/d2bbbb4b-1642-470c-b04f-fa0da2786967)
+
+Rekomendasi tersebut relevan dengan preferensi pengguna, terutama karena banyaknya anime yang memiliki genre mirip dengan anime yang sebelumnya disukai oleh pengguna. Hal ini menunjukkan bahwa model collaborative filtering berhasil mempelajari pola ketertarikan pengguna berdasarkan perilaku pengguna lain yang mirip.
 
 
 ## Evaluation
