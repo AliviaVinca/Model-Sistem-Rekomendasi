@@ -16,13 +16,13 @@ Rekomendasi yang akurat akan meningkatkan pengalaman pengguna, memperpanjang wak
 
 ### Problem Statements
 
-1. Bagaimana cara memberikan rekomendasi anime yang relevan berdasarkan data pengguna yang dipersonalisasi dengan teknik content-based filtering?
-2. Dengan data rating yang dimiliki, bagaimana cara untuk merekomendasikan anime yang akan disukai oleh penonton dan belum pernah ditonton oleh penonton tersebut sebelumnya?
+1. Bagaimana cara memberikan rekomendasi anime yang relevan berdasarkan preferensi pengguna menggunakan teknik content-based filtering?
+2. Dengan data rating yang tersedia, bagaimana sistem dapat merekomendasikan anime yang belum pernah ditonton, namun kemungkinan besar disukai oleh pengguna?
 
 ### Goals
 
-1. Membangun sistem rekomendasi anime yang mampu memberikan saran personal berbasis preferensi pengguna.
-2. Menerapkan dan mengimplementasikan dua pendekatan sistem rekomendasi yaitu conten-based filtering dan collaborative filtering.
+1. Membangun sistem rekomendasi anime yang mampu memberikan saran personal berdasarkan preferensi pengguna.
+2. Mengimplementasikan dua pendekatan sistem rekomendasi, yaitu content-based filtering dan collaborative filtering.
 
 #### Solution Statement
 
@@ -31,11 +31,14 @@ Proyek ini menggunakan dua pendekatan solusi utama:
 2. Collaborative Filtering
 
 * **Pendekatan: Content-based Filtering**
-Menggunakan metadata anime (seperti genre, tipe, dan rating) untuk membangun profil preferensi pengguna berdasarkan anime yang telah mereka beri rating tinggi. Model kemudian menghitung kesamaan antara profil pengguna dan fitur anime yang belum ditonton, menggunakan cosine similarity atau model pembobotan seperti TF-IDF. Rekomendasi diberikan berdasarkan kemiripan konten, bukan perilaku pengguna lain.
+
+Pendekatan ini menggunakan metadata dari anime (seperti genre, tipe, dan rating) untuk membentuk profil preferensi pengguna. Profil ini dibangun berdasarkan anime yang sebelumnya diberi rating tinggi oleh pengguna. Model kemudian menghitung kesamaan antara profil pengguna dan fitur dari anime yang belum ditonton menggunakan teknik seperti cosine similarity atau pembobotan TF-IDF.
+Rekomendasi diberikan berdasarkan kemiripan konten, tanpa bergantung pada data pengguna lain.
 
 * **Pendekatan: Model-based Collaborative Filtering**
-  Menggunakan neural collaborative filtering (NCF) dengan embedding layer untuk merepresentasikan pengguna dan anime dalam bentuk vektor laten, dan memprediksi rating berdasarkan arsitektur deep learning.
-
+  
+Menggunakan pendekatan model-based collaborative filtering dengan Neural Collaborative Filtering (NCF). Pendekatan ini memanfaatkan embedding layer untuk merepresentasikan pengguna dan anime dalam bentuk vektor laten, dan memprediksi rating menggunakan arsitektur deep learning.
+Model ini belajar dari pola interaksi antar pengguna dan item, dan mampu menangkap hubungan kompleks antar entitas.
 ## Data Understanding
 
 ### Sumber Dataset
@@ -227,25 +230,51 @@ Dengan rincian sebagai berikutt: TV sebanyak 3787, OVA sebanyak 3311, Movie seba
 
 Langkah-langkah preprocessing sebelum membangun sistem rekomendasi:
 
-1. **Sampling rating sebanyak 500.000 rating** karena pada sebelumnya terdapat 7.813.737 baris jadi kita bisa mengambil sebanyak 500.000 sample dari rating tersebut.
-2. **Membersihkan kolom kosong** pembersihan kolom kosong dilakukan dengan mengisi value pada kolom `genre` dengan 'Unknown', mengisi value pada kolom `type` dengan 'Unknown', dan mengisi value pada kolom `rating` dengan '0.00'. Hal ini dilakukan agar data variasi anime tetap dan tidak berkurang dan kolom kosong terisi.  
-3. **Membersihkan nama anime** membersihkan nama anime dari karakter non-alfabetnumerik karena model akan lebih baik jika hanya bekerja dengan kata-kata yang bersih dan bermakna.
+1. **Sampling Data Rating**
+- Langkah: Mengambil 500.000 baris secara acak dari dataset `rating.csv`.
+- Alasan: Dataset `rating.csv` terdiri dari 7.813.737 entri, yang terlalu besar dan membutuhkan waktu pemrosesan lama. Oleh karena itu, dilakukan sampling agar pemodelan lebih efisien namun tetap representatif.
+   
+2. **Penanganan Nilai Kosong**
+- Langkah:
+  - Kolom `genre` diisi dengan `'Unknown'`
+  - Kolom `type` diisi dengan `'Unknown'`
+  - Kolom `rating` (dari `anime.csv`) diisi dengan `0.00`
+- Alasan: Menghindari hilangnya entri anime yang valid hanya karena terdapat data kosong. Dengan mengisi nilai kosong, variasi data tetap terjaga tanpa kehilangan baris penting.
+
+3. **Pembersihan Nama Anime**
+- Langkah: Menghapus karakter non-alfanumerik dari kolom name.
+- Alasan: Nama anime yang bersih mempermudah pemrosesan teks dalam model content-based filtering, terutama saat dilakukan pencarian judul mirip.
 
 ### Data Preparation & Preprocessing - Content Based Filtering
-1. Standarisasi genre anime genre anime di standarisasi (ganti koma menjadi spasi untuk mengganti pemisah genre) agar klasifikasi lebih akurat.
-2. Ekstraksi Fitur dengan TF-IDF Untuk merepresentasikan setiap anime berdasarkan genre-nya. 
-3. Selanjutnya transformasi genre ke bentuk matriks TF-IDF.
-4. Selanjutnya ubah vektor TF-IDF ke dalam bentuk matriks todense untuk kebutuhan visual.
-5. Selanjutnya buatlah dataframe untuk melihat matriks TF-IDF.
+1. **Standarisasi Genre**
+- Langkah: Mengubah tanda pemisah genre dari koma (,) menjadi spasi.
+- Alasan: Genre yang rapi dan konsisten akan menghasilkan representasi fitur yang lebih baik saat diekstraksi menggunakan TF-IDF.
+
+2. Ekstraksi Fitur dengan TF-IDF
+- Langkah:
+  - Menggunakan TF-IDF Vectorizer pada kolom genre.
+  - Mengubah genre menjadi matriks fitur berbobot.
+  - Mengubah matriks ke bentuk dense untuk keperluan analisis visual.
+  - Membuat DataFrame dari hasil vektorisasi untuk interpretasi.
+- Alasan: TF-IDF membantu merepresentasikan kemiripan antar anime berdasarkan genre, yang penting dalam sistem rekomendasi berbasis konten.
 
 ### Data Preparation & Preprocessing - Collaborative Filtering
-1. Panggil kembali data rating yang sudah di sampling di awal `rating_sample`.
-2. Selanjutnya filter rating dengan menghapus rating -1 karena menunjukkan anime yang belum di tonton.
-3. Encode `user_id` dan `anime_id` menjadi index numerik.
-4. Split data menjadi train dan validation set.
+1. Pemanggilan dan Pembersihan Rating
+- Langkah:
+  - Menggunakan rating_sample dari hasil sampling awal.
+  - Menghapus rating bernilai -1 (menandakan belum menonton).
+- Alasan: Rating -1 tidak dapat digunakan untuk melatih model karena tidak memberikan informasi preferensi pengguna.
+
+2. Encoding ID
+- Langkah: Mengubah user_id dan anime_id menjadi ID numerik kontinu menggunakan LabelEncoder.
+- Alasan: Model Machine Learning (terutama model matriks embedding) hanya dapat bekerja dengan input numerik.
+
+3. Split Dataset
+- Langkah: Membagi dataset menjadi training set dan validation set.
+- Alasan: Agar dapat melatih model dan menguji performanya secara objektif menggunakan data yang tidak dilihat saat pelatihan.
 
 ## Modeling
-Pada proyek ini, dikembangkan sistem rekomendasi anime dengan dua pendekatan berbeda, yaitu content-based filtering dan collaborative filtering. Kedua metode ini bertujuan untuk menghasilkan rekomendasi anime yang dipersonalisasi berdasarkan preferensi pengguna.
+Pada proyek ini dikembangkan sistem rekomendasi anime yang bertujuan memberikan rekomendasi yang sesuai dengan minat pengguna. Dua pendekatan utama yang digunakan adalah Content-Based Filtering dan Collaborative Filtering, dengan harapan mampu menangani berbagai kondisi seperti cold-start atau data sparsitiy secara komplementer.
 
 ### Content-Based Filtering
 Content-Based Filtering adalah salah satu metode dalam sistem rekomendasi yang memberikan rekomendasi berdasarkan kemiripan antar item berdasarkan fitur-fitur (atribut) item tersebut. Rekomendasi yang diberikan kepada pengguna adalah item yang memiliki kemiripan karakteristik dengan item yang pernah disukai atau dikonsumsi pengguna sebelumnya.
@@ -328,20 +357,25 @@ Maka sistem akan merekomendasikan 10 anime berikut:
 
 Rekomendasi tersebut relevan dengan preferensi pengguna, terutama karena banyaknya anime yang memiliki genre mirip dengan anime yang sebelumnya disukai oleh pengguna. Hal ini menunjukkan bahwa model collaborative filtering berhasil mempelajari pola ketertarikan pengguna berdasarkan perilaku pengguna lain yang mirip.
 
+### Kesimpulan Modeling and Result
+Hasil rekomendasi menunjukkan bahwa sistem mampu mengidentifikasi anime dengan genre atau preferensi yang relevan berdasarkan histori pengguna. Meskipun belum dilakukan evaluasi kuantitatif seperti precision/recall, validasi visual terhadap top-N rekomendasi menunjukkan kualitas yang memuaskan.
+
+Kedua pendekatan saling melengkapi: content-based filtering efektif saat data pengguna masih terbatas, sementara collaborative filtering mampu menangkap pola preferensi pengguna secara lebih dalam. Kombinasi keduanya membuka peluang untuk membangun sistem rekomendasi hybrid di masa depan.
+
 
 ## Evaluation
 
 ### Evaluasi Content Based Filtering
 
-**Metrik Evaluasi Sistem Rekomendasi: Recommender System precision**
+**Metrik Evaluasi: Precision@K**
 
-Precision mengukur seberapa relevan item yang direkomendasikan oleh sistem kepada pengguna.
+Precision mengukur seberapa banyak item yang direkomendasikan oleh sistem benar-benar relevan bagi pengguna. Metrik ini fokus pada kualitas rekomendasi, terutama pada Top-K rekomendasi yang ditampilkan.
 
-Definisi:
+Formula:
 
-$\text{Precision} = \frac{\text{Jumlah item relevan yang direkomendasikan}}{\text{Jumlah total item yang direkomendasikan}}$
+$\text{Precision@K} = \frac{\text{Jumlah item relevan yang direkomendasikan (dalam Top-K)}}{\text{Jumlah total item yang direkomendasikan(K)}}$
 
-Ini mencerminkan seberapa baik sistem dalam merekomendasikan item paling atas, yang paling mungkin dilihat pengguna.
+Precision@K sangat cocok digunakan ketika kita hanya ingin menampilkan sejumlah rekomendasi teratas yang paling relevan dan ingin menghindari item tidak relevan.
 
 #### Hasil Evaluasi dengan Precision
 **Kita akan mencoba Precision menggunakan `anime_recomendation`**
@@ -355,17 +389,34 @@ Model Content-Based Filtering dievaluasi menggunakan metrik Precision@5 terhadap
 $\text{Precision@5} = \frac{\text{X}}{\text{5}}=0.X$
 
 **Kita akan mencoba Precision dengan manual**
+
+Kita uji dengan contoh user fiktif yang menyukai anime tertentu. Sistem merekomendasikan 5 anime teratas berdasarkan kemiripan konten.
+
+📌 Contoh Kasus:
+- Input: "Saiki Kusuo no Ψ-nan TV"
+- Output: 5 anime teratas berdasarkan cosine similarity.
+
 ![Screenshot 2025-06-02 000604](https://github.com/user-attachments/assets/51e19244-cb8e-436e-a2f9-a7f6d8336d1c)
 
-Berdasarkan hasil evaluasi Content-Based Filtering menggunakan metrik Precision@5 terhadap 1 pengguna uji coba, diperoleh nilai Precision@5 = 0.4
+Dari hasil rekomendasi:
 
-Lalu kita coba menguji dengan 2 pengguna uji coba.
+2 dari 5 anime ternyata sesuai dengan preferensi pengguna berdasarkan histori.
+
+$\text{Precision@5} = \frac{\text{2}}{\text{5}}=0.4$
+
+Diperoleh nilai Precision@5 = 0.4
+
+Lalu kita coba menguji dengan 2 pengguna uji coba (Multi User).
 
 ![Screenshot 2025-06-02 000637](https://github.com/user-attachments/assets/5040b2fc-3f65-44fd-b0fb-c574a40c10ff)
 
 Berdasarkan hasil evaluasi Content-Based Filtering menggunakan metrik Precision@5 terhadap 2 pengguna uji coba, diperoleh nilai sebagai berikut:
 - User 1: Precision@5 = 0.4
 - User 2: Precision@5 = 0.4
+
+Rata-rata Precision@5
+
+$\frac{\text{0.4 + 0.4}}{\text{2}}=0.4$
 
 Maka, rata-rata Precision@5 adalah 0.40. Nilai ini menunjukkan bahwa dari 5 anime yang direkomendasikan, rata-rata 2 dari 5 adalah anime yang memang relevan atau disukai pengguna berdasarkan histori.
 
@@ -446,10 +497,15 @@ Tengen Toppa Gurren Lagann : Action Adventure Comedy Mecha Sci-Fi
 
 ## Conclusion
 
-Proyek ini berhasil membangun sistem rekomendasi anime berbasis Content-Based Filtering dan collaborative filtering. Model mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
+Proyek ini berhasil membangun sistem rekomendasi anime berbasis Content-Based Filtering dan Collaborative Filtering. Kesimpulan yang dapat kita ambil adalah:
+- Content-Based Filtering bekerja baik untuk user dengan preferensi genre tertentu.
+- Collaborative Filtering efektif untuk data interaksi tinggi, tapi rawan overfitting.
+
+Model mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
 
 * Menambahkan metadata (genre, tipe, studio) sebagai fitur tambahan.
 * Menggunakan teknik regularisasi dan dropout untuk menghindari overfitting.
+* Tambahkan hybrid approach, lebih banyak user rating, regularisasi model.
 * Menguji dengan metrik top-N seperti Precision\@10, Recall\@10.
 
 Sistem rekomendasi ini berpotensi diterapkan dalam platform streaming untuk meningkatkan keterlibatan dan kepuasan pengguna.
