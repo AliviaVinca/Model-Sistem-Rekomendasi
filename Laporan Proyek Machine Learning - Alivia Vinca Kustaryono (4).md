@@ -67,7 +67,11 @@ Dataset terdiri dari dua file utama:
 ### Exploratory Data Analysis (EDA)
 
 **Cek Informasi Dataset**
+
+![Screenshot 2025-06-01 084157](https://github.com/user-attachments/assets/66a9a898-f45e-4498-89d3-41a3ac9f78d9)
+
 (gambar anime.info())
+
 dataset anime.csv memiliki 12.294 baris dimulai dari indeks 0 hingga 12.293. Dimana setiap baris merepresentasikan satu entri anime.
 Dataset ini memiliki 7 kolom yaitu `anime_id`,`name`,`genre`,`type`,`episodes`,`rating`,`members`
 Jumlah masing-masing tipe data:
@@ -75,13 +79,20 @@ Jumlah masing-masing tipe data:
 * int64 → 2 kolom (`anime_id`, `members`)
 * object → 4 kolom (`name`, `genre`, `type`, `episodes`)
 
+![Screenshot 2025-06-01 084220](https://github.com/user-attachments/assets/7411b9c0-0ff4-4c3b-ae54-86d39d14a65b)
+
 (gambar rating.info())
+
 dataset rating.csv memiliki 7.813.737 baris dimulai dari indeks 0 hingga 7.813.736. Dimana setiap baris merepresentasikan satu entri rating.
 Dataset ini memiliki 3 kolom yaitu `user_id`,`anime_id`,`rating`
 Jumlah masing-masing tipe data:
 * int64 → 3 kolom (`user_id`,`anime_id`,`rating`)
 
+
 **Statistik Deskriptif**
+
+![Screenshot 2025-06-01 084240](https://github.com/user-attachments/assets/25642e0e-608b-4350-8b49-93eef9b8ad72)
+
 (gambar anime.describe())
 
 Kolom: `anime`
@@ -93,7 +104,7 @@ Kolom: `anime`
 | Std       | 11,455.29 | Sebaran ID anime (deviasi standar)                                         |
 | Min       | 1         | ID anime terkecil                                                          |
 | 25%       | 3,484.25  | 25% anime memiliki ID ≤ 3484           |
-| Median    | 10,260.50 | Setengah anime memiliki ID ≤ 10260                                                      |
+| Median    | 10,260.50 | Setengah anime memiliki ID ≤ 10260                                         |
 | 75%       | 24,794.50 | 75% anime memiliki ID ≤ 24794            |
 | Max       | 34,527    | ID anime tertinggi                                                          |
 
@@ -101,12 +112,12 @@ Kolom: `rating`
 
 | Statistik | Nilai  | Penjelasan                                                                 |
 |-----------|--------|-----------------------------------------------------------------------------|
-| Count     | 12,064 | Hanya ada 12.064 rating (230 missing/null)                                      |
-| Mean      | 6.47   | Rata-rata rating adalah 6.47 artinya cukup positif                                           |
-| Std       | 1.03   | Standar deviasi sekitar 1, rating cukup konsisten                                      |
+| Count     | 12,064 | Hanya ada 12.064 rating (230 missing/null)                                  |
+| Mean      | 6.47   | Rata-rata rating adalah 6.47 artinya cukup positif                          |
+| Std       | 1.03   | Standar deviasi sekitar 1, rating cukup konsisten                           |
 | Min       | 1.67   | Rating terendah                                                             |
 | 25%       | 5.88   | 25% anime memiliki rating ≤ 5.88               |
-| Median    | 6.57   | Rating tengah adalah 6.57                                                         |
+| Median    | 6.57   | Rating tengah adalah 6.57                                                   |
 | 75%       | 7.18   | 75% anime memiliki rating ≤ 7.18                |
 | Max       | 10.00  | Rating tertinggi                                                            |
 
@@ -115,14 +126,16 @@ Kolom: `members`
 | Statistik | Nilai       | Penjelasan                                                                 |
 |-----------|-------------|-----------------------------------------------------------------------------|
 | Count     | 12,294      | Tidak ada nilai kosong                    |
-| Mean      | 18,071.34   | Rata-rata anime ditonton oleh 18 ribu orang                                         |
+| Mean      | 18,071.34   | Rata-rata anime ditonton oleh 18 ribu orang                                |
 | Std       | 54,820.68   | Variasi yang sangat besar, artinya ada anime yang sangat populer|
-| Min       | 5           | Anime paling tidak populer hanya ditonton oleh 5 orang                        |
+| Min       | 5           | Anime paling tidak populer hanya ditonton oleh 5 orang                     |
 | 25%       | 225         | 25% anime ditonton oleh ≤ 225 orang                                 |
-| Median    | 1,550       | Setengah anime ditonton oleh ≤ 1.550 orang                                                |
+| Median    | 1,550       | Setengah anime ditonton oleh ≤ 1.550 orang                                  |
 | 75%       | 9,437       | 75% anime ditonton oleh ≤ 9.437 orang nilai ini                    |
 | Max       | 1,013,917   | Anime terpopuler dengan penonton terbanyak                                  |
 
+
+![Screenshot 2025-06-01 084251](https://github.com/user-attachments/assets/f8ec01d7-2323-4967-b703-a8b75a18665d)
 
 (gambar rating.describe())
 
@@ -168,22 +181,43 @@ Kolom: `rating`
 
 
 **Data Kosong**
+
+![Screenshot 2025-06-01 084308](https://github.com/user-attachments/assets/6e7d5009-9a02-4a8d-97f2-91e46603d2b3)
+
 (gambar anime.isnull().sum())
+
 Terdapat 62 data kosong pada kolom `genre`, 25 data kosong pada kolom `type`, dan 230 data kosong pada kolom `rating`.
 
+![Screenshot 2025-06-01 084316](https://github.com/user-attachments/assets/71210f41-ad86-4c82-ab97-c4dda0eb6a5b)
+
 (gambar rating.isnull().sum())
+
 Tidak terdapat data kosong pada rating.
 
+
 **Data Duplikat**
+
+![Screenshot 2025-06-01 084345](https://github.com/user-attachments/assets/abce728f-82cb-4ec2-872e-e260ceae4b56)
+
 (gambar anime.duplicated().sum() dan rating.duplicated().sum())
+
 Tidak terdapat duplikat pada data anime dan terdapat satu duplikat pada data rating.
 
+
 **Visualisasi Genre Anime**
+
+![top 10 genre anime](https://github.com/user-attachments/assets/3fa3acf5-7f3d-4ee4-95a7-fb1b4aaf21ec)
+
 (gambar Top 10 Genre Anime)
+
 Dengan rincian sebagai berikut: Genre Komedi sebanyak 3193, Genre Action sebanyak 2845, Genre Sci-Fi sebanyak 1986, Genre Fantasy sebanyak 1815, Genre Shounen sebanyak 1663, Genre Adventure sebanyak 1457, Genre Comedy sebanyak 1452, Genre Romance sebanyak 1371, Genre Kids sebanyak 1213, dan Genre School sebanyak 1170.
 
 **Visualisasi Tipe Anime**
+
+![tipe anime](https://github.com/user-attachments/assets/d93be0b5-fc7c-4c3d-89e5-5f37d28ebb41)
+
 (gambar Jenis-Jenis Anime berdasarkan Tipe)
+
 Dengan rincian sebagai berikutt: TV sebanyak 3787, OVA sebanyak 3311, Movie sebanyak 2348, Special sebanyak 1676, ONA sebanyak 659, dan Music sebanyak 488.
 
 
@@ -262,19 +296,18 @@ Terdapat dua jenis utama:
 5. Terakhir prediksi dan rekomendasi model.
 
 
-
-
-
-
 ## Evaluation
 
 ### Evaluasi Content Based Filtering
+
 **Metrik Evaluasi Sistem Rekomendasi: Recommender System precision**
+
 Precision mengukur seberapa relevan item yang direkomendasikan oleh sistem kepada pengguna.
+
 Definisi:
-$$
-\text{Precision} = \frac{\text{Jumlah item relevan yang direkomendasikan}}{\text{Jumlah total item yang direkomendasikan}}
-$$
+
+$\text{Precision} = \frac{\text{Jumlah item relevan yang direkomendasikan}}{\text{Jumlah total item yang direkomendasikan}}$
+
 Ini mencerminkan seberapa baik sistem dalam merekomendasikan item paling atas, yang paling mungkin dilihat pengguna.
 
 ### Evaluasi Collaborative Filtering
@@ -282,46 +315,73 @@ Ini mencerminkan seberapa baik sistem dalam merekomendasikan item paling atas, y
 Pada sistem rekomendasi ini, Mean Squared Error (MSE) dan Root Mean Squared Error (RMSE) adalah metrik umum yang digunakan untuk mengevaluasi akurasi prediksi model karena keduanya mengukur rata-rata kuadrat atau akar kuadrat dari kesalahan (selisih antara nilai prediksi dan nilai sebenarnya).
 
 **MSE (Mean Squared Error)**
+
 MSE mengukur rata-rata kuadrat dari selisih antara nilai prediksi dan nilai aktual.
-$$
-\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-$$
-* y i​ = rating aktual dari pengguna ke item
-* 𝑦^𝑖y^​i​= rating yang diprediksi oleh model
-* n = jumlah total prediksi
+
+$\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 $
+
+* `yᵢ`= rating aktual dari pengguna ke item
+* `ŷᵢ`​= rating yang diprediksi oleh model
+* `n` = jumlah total prediksi
+
 
 **RMSE (Root Mean Squared Error)**
+
 RMSE adalah akar kuadrat dari MSE, yang artinya:
-$$
-\text{RMSE} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 }
-$$
+
+$\text{RMSE} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 } = \sqrt{MSE}$
+
 RMSE mengembalikan hasil dalam satuan yang sama dengan rating (misalnya 1–5), sehingga lebih mudah diinterpretasikan.
 
 #### Hasil Evaluasi dengan MSE & RMSE
+![Screenshot 2025-06-01 113945](https://github.com/user-attachments/assets/2908241c-bd61-488b-a9c4-f58f380e9f25)
+
+Hasil evaluasi Collaborative Filtering menunjukkan performa model pada data validasi dengan nilai loss (MSE) sebesar sekitar 53.2460 dan RMSE sekitar 7.2969. Model yang dievaluasi memiliki tingkat kesalahan prediksi yang cukup tinggi (RMSE > 7). Hal ini mengindikasikan bahwa model masih belum cukup akurat dalam memprediksi rating pada data validasi. 
 
 #### Visualisasi Ecpoch Tarining & Validation
+![RMSE](https://github.com/user-attachments/assets/e9a1ba6c-1826-40b9-bfa2-7465b231673a)
+
+Kurva biru (Train RMSE) menunjukkan bahwa error pada data pelatihan cepat menurun drastis hingga sekitar epoch ke-5, kemudian stabil di sekitar RMSE 1.4. Kurva oranye (Validation RMSE) relatif datar dan tinggi, bertahan di angka sekitar 7.2 – 7.4 selama seluruh pelatihan. Model mengalami overfitting dimana RMSE pada data pelatihan sangat rendah (model mempelajari data pelatihan dengan sangat baik), tetapi RMSE pada data validasi tetap tinggi dan tidak membaik. Ini menunjukkan bahwa model tidak mampu melakukan generalisasi dengan baik ke data yang belum dilihat (data validasi).
+
 
 ## Recommendation Output
 
+### Recomendation Content-Based Filtering
+Model digunakan untuk memprediksi rekomendasi anime mirip dengan anime yang di panggil.
+
+![Screenshot 2025-06-01 115043](https://github.com/user-attachments/assets/b42bdb38-3f07-4734-8926-ae1b8a3be2f6)
+
+### Recomendation Collaborative Filtering
+
 Model digunakan untuk memprediksi rating semua anime yang belum ditonton oleh user acak. Kemudian, 10 anime dengan prediksi rating tertinggi direkomendasikan.
 
-Contoh output:
 
 ```
-[Anime Favorit User]
-- Attack on Titan | Genre: Action, Drama
-- Naruto | Genre: Action, Shounen
-...
-
-[Rekomendasi Top 10 Anime]
-- One Punch Man | Genre: Action, Comedy
-- Death Note | Genre: Mystery, Supernatural
-...
+Anime with high ratings from user
+--------------------------------
+Major World Series : Comedy
+Noragami : Action
+Digimon Adventure : Action
+Life no Color : Music
+AfroKen : Comedy
+--------------------------------
+Top 10 anime recommendation
+--------------------------------
+Mahou Shoujo MadokaMagica : Drama
+Magi The Kingdom of Magic : Action
+Mahou Shoujo MadokaMagica Movie 3 Hangyaku no Monogatari : Drama
+Katanagatari : Action
+Major S6 : Comedy
+Mononoke : Demons
+Noragami Aragoto : Action
+Tonari no Totoro : Adventure
+Ookami to Koushinryou II : Adventure
+Gintama Nanigoto mo Saiyo ga Kanjin nano de Tasho Senobisuru Kurai ga Choudoyoi : Action
 ```
 
 ## Conclusion
 
-Proyek ini berhasil membangun sistem rekomendasi anime berbasis neural collaborative filtering. Model menunjukkan performa yang stabil dan mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
+Proyek ini berhasil membangun sistem rekomendasi anime berbasis Content-Based Filtering dan collaborative filtering. Model menunjukkan performa yang stabil dan mampu menghasilkan rekomendasi yang relevan. Ke depan, sistem ini dapat ditingkatkan dengan:
 
 * Menambahkan metadata (genre, tipe, studio) sebagai fitur tambahan.
 * Menggunakan teknik regularisasi dan dropout untuk menghindari overfitting.
